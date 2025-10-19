@@ -1,0 +1,38 @@
+services:
+  computer-vision-backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./detections.db
+      - CAMERA_SOURCE=-1
+      - FRAME_WIDTH=640
+      - FRAME_HEIGHT=480
+      - FPS=30
+      - DETECTOR_CHOICE=yolov8n
+      - CONFIDENCE_THRESHOLD=0.5
+      - IOU_THRESHOLD=0.45
+      - ENABLE_SNAPSHOTS=true
+      - SNAPSHOT_FOLDER=./snapshots
+      - MAX_SNAPSHOTS=100
+      - ALLOWED_FILE_TYPES=["jpg","jpeg","png","mp4","avi","mov"]
+      - MAX_FILE_SIZE_MB=50
+      - LOG_LEVEL=INFO
+      - DEBUG=false
+      - USE_SAGEMAKER=true
+      - AWS_SAGEMAKER_ENDPOINT=yolov8n-endpoint
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ./snapshots:/app/snapshots
+      - ./logs:/app/logs
+      - ./detections.db:/app/detections.db
+      - ~/.aws:/root/.aws:ro  # Mount AWS credentials (read-only)
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

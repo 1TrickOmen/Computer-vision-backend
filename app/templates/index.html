@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .video-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+            margin-bottom: 20px;
+        }
+        
+        .video-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .upload-section {
+            margin-top: 20px;
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input:hover {
+            background: #e9ecef;
+            border-color: #5a6fd8;
+        }
+        
+        .camera-settings {
+            margin-top: 20px;
+        }
+        
+        .setting-group {
+            margin-bottom: 15px;
+        }
+        
+        .setting-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .setting-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .setting-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .setting-group small {
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .detection-mode {
+            margin-bottom: 15px;
+        }
+        
+        .mode-switcher {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .mode-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .mode-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        
+        .mode-option input[type="radio"]:checked + .mode-label {
+            color: #667eea;
+        }
+        
+        .mode-option:has(input[type="radio"]:checked) {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .mode-label {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .mode-label strong {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .mode-label small {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .mode-status {
+            text-align: center;
+            padding: 8px;
+            background: #e8f5e8;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #2d5a2d;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: #28a745;
+        }
+        
+        .status-inactive {
+            background: #dc3545;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 Computer Vision Backend Service</h1>
+            <p>Real-time Object Detection with Live Streaming</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="video-section">
+                <div class="video-container">
+                    <img src="/api/v1/video_feed" alt="Live Video Feed" class="video-feed" id="videoFeed">
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="refreshVideoFeed()">🔄 Refresh Feed</button>
+                    <button class="btn btn-success" onclick="captureSnapshot()">📸 Capture Snapshot</button>
+                    <a href="/api/v1/detections" class="btn btn-secondary" target="_blank">📊 View Detections</a>
+                    <a href="/api/v1/snapshots" class="btn btn-secondary" target="_blank">🖼️ View Snapshots</a>
+                </div>
+                
+                <div class="upload-section">
+                    <h3>📁 Upload File for Processing</h3>
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <input type="file" id="fileInput" class="file-input" accept="image/*,video/*" required>
+                        <div style="margin-top: 10px;">
+                            <label>
+                                <input type="checkbox" id="saveSnapshot" checked> Save snapshot with detections
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 15px; width: 100%;">
+                            🚀 Process File
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="card">
+                    <h3>📊 System Status</h3>
+                    <div id="systemStatus">
+                        <p><span class="status-indicator status-active"></span>Camera Service: <span id="cameraStatus">Loading...</span></p>
+                        <p><span class="status-indicator status-active"></span>Detection Service: <span id="detectionStatus">Loading...</span></p>
+                        <p><span class="status-indicator status-active"></span>Model: <span id="modelStatus">Loading...</span></p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📈 Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalDetections">-</div>
+                            <div class="stat-label">Total Detections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalSnapshots">-</div>
+                            <div class="stat-label">Total Snapshots</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="recentDetections">-</div>
+                            <div class="stat-label">Recent (24h)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="recentSnapshots">-</div>
+                            <div class="stat-label">Recent (24h)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🤖 Detection Mode</h3>
+                    <div class="detection-mode">
+                        <div class="mode-switcher">
+                            <label class="mode-option">
+                                <input type="radio" name="detectionMode" value="local" id="localMode">
+                                <span class="mode-label">
+                                    <strong>Local YOLO</strong>
+                                    <small>Fast, offline detection</small>
+                                </span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="detectionMode" value="cloud" id="cloudMode" checked>
+                                <span class="mode-label">
+                                    <strong>Cloud SageMaker</strong>
+                                    <small>Scalable, cloud-based (Default)</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="mode-status">
+                            <span id="currentModeStatus">Cloud SageMaker Mode Active</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>⚙️ Camera Settings</h3>
+                    <div class="camera-settings">
+                        <div class="setting-group">
+                            <label for="brightness">Brightness</label>
+                            <input type="range" id="brightness" min="0" max="64" value="32" onchange="updateCameraSetting('brightness', this.value)">
+                            <small id="brightnessValue" style="color: #666; font-size: 0.8em;"></small>
+                        </div>
+                        <div class="setting-group">
+                            <label for="contrast">Contrast</label>
+                            <input type="range" id="contrast" min="0" max="64" value="32" onchange="updateCameraSetting('contrast', this.value)">
+                            <small id="contrastValue" style="color: #666; font-size: 0.8em;"></small>
+                        </div>
+                        <div class="setting-group">
+                            <label for="exposure">Exposure</label>
+                            <input type="range" id="exposure" min="-10" max="10" value="-6" onchange="updateCameraSetting('exposure', this.value)">
+                            <small id="exposureValue" style="color: #666; font-size: 0.8em;"></small>
+                        </div>
+                        <div class="setting-group">
+                            <label for="focus">Focus (Auto)</label>
+                            <input type="range" id="focus" min="0" max="100" value="50" onchange="updateCameraSetting('focus', this.value)" disabled>
+                            <small id="focusValue" style="color: #666; font-size: 0.8em;"></small>
+                            <small style="color: #666; font-size: 0.8em;">Focus control disabled - camera uses autofocus</small>
+                        </div>
+                        <div class="setting-group">
+                            <label for="frameSize">Frame Size</label>
+                            <select id="frameSize" onchange="updateFrameSize(this.value)">
+                                <option value="640x480">640x480 (VGA)</option>
+                                <option value="1920x1080">1920x1080 (Full HD)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Computer Vision Backend Service v1.0.0 | Built with FastAPI, OpenCV & YOLOv8</p>
+        </div>
+    </div>
+    
+    <script>
+        // Refresh video feed
+        function refreshVideoFeed() {
+            const videoFeed = document.getElementById('videoFeed');
+            videoFeed.src = '/api/v1/video_feed?' + new Date().getTime();
+        }
+        
+        // Capture snapshot
+        function captureSnapshot() {
+            fetch('/api/v1/snapshots', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ capture: true })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Snapshot captured successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to capture snapshot');
+            });
+        }
+        
+        // Update camera setting
+        function updateCameraSetting(property, value) {
+            const formData = new FormData();
+            formData.append('property_name', property);
+            formData.append('value', value);
+            
+            fetch('/api/v1/camera/settings', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Updated ${property} to ${value}`);
+            })
+            .catch(error => {
+                console.error('Error updating camera setting:', error);
+            });
+        }
+        
+        // Update frame size
+        function updateFrameSize(resolution) {
+            const [width, height] = resolution.split('x').map(Number);
+            
+            // Update width
+            const formDataWidth = new FormData();
+            formDataWidth.append('property_name', 'frame_width');
+            formDataWidth.append('value', width);
+            
+            fetch('/api/v1/camera/settings', {
+                method: 'POST',
+                body: formDataWidth
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Updated frame width to ${width}`);
+                
+                // Update height
+                const formDataHeight = new FormData();
+                formDataHeight.append('property_name', 'frame_height');
+                formDataHeight.append('value', height);
+                
+                return fetch('/api/v1/camera/settings', {
+                    method: 'POST',
+                    body: formDataHeight
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Updated frame height to ${height}`);
+                console.log(`Frame size updated to ${resolution}`);
+            })
+            .catch(error => {
+                console.error('Error updating frame size:', error);
+            });
+        }
+        
+        // Handle file upload
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const saveSnapshot = document.getElementById('saveSnapshot').checked;
+            
+            if (!fileInput.files[0]) {
+                alert('Please select a file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('save_snapshot', saveSnapshot);
+            
+            try {
+                const response = await fetch('/api/v1/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert(`File processed successfully!\nObjects detected: ${result.objects_detected}\nProcessing time: ${result.processing_time_ms.toFixed(2)}ms`);
+                    loadStats(); // Refresh statistics
+                } else {
+                    alert(`Error: ${result.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to process file');
+            }
+        });
+        
+        // Load system statistics
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/v1/stats');
+                const stats = await response.json();
+                
+                document.getElementById('totalDetections').textContent = stats.total_detections;
+                document.getElementById('totalSnapshots').textContent = stats.total_snapshots;
+                document.getElementById('recentDetections').textContent = stats.recent_detections_24h;
+                document.getElementById('recentSnapshots').textContent = stats.recent_snapshots_24h;
+                
+                // Update status indicators
+                document.getElementById('cameraStatus').textContent = stats.camera_status;
+                document.getElementById('detectionStatus').textContent = stats.detection_service_status;
+                
+                if (stats.model_info) {
+                    document.getElementById('modelStatus').textContent = stats.model_info.model_name;
+                    
+                    // Update mode switcher based on current mode
+                    const isSageMaker = stats.model_info.status === 'sagemaker_endpoint';
+                    document.getElementById('localMode').checked = !isSageMaker;
+                    document.getElementById('cloudMode').checked = isSageMaker;
+                    
+                    // Update mode status display
+                    const statusElement = document.getElementById('currentModeStatus');
+                    if (isSageMaker) {
+                        statusElement.textContent = 'Cloud SageMaker Mode Active';
+                        statusElement.style.background = '#e8f4fd';
+                        statusElement.style.color = '#1e5a8a';
+                    } else {
+                        statusElement.textContent = 'Local YOLO Mode Active';
+                        statusElement.style.background = '#e8f5e8';
+                        statusElement.style.color = '#2d5a2d';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Load camera settings
+        async function loadCameraSettings() {
+            try {
+                const response = await fetch('/api/v1/camera/settings');
+                const settings = await response.json();
+                
+                // Update brightness slider with actual range
+                if (settings.brightness !== undefined && settings.brightness_range) {
+                    const brightnessSlider = document.getElementById('brightness');
+                    brightnessSlider.min = settings.brightness_range.min;
+                    brightnessSlider.max = settings.brightness_range.max;
+                    brightnessSlider.value = settings.brightness;
+                    document.getElementById('brightnessValue').textContent = `Range: ${settings.brightness_range.min.toFixed(0)} - ${settings.brightness_range.max.toFixed(0)}`;
+                    console.log(`Brightness range: ${settings.brightness_range.min} to ${settings.brightness_range.max}, current: ${settings.brightness}`);
+                }
+                
+                // Update contrast slider with actual range
+                if (settings.contrast !== undefined && settings.contrast_range) {
+                    const contrastSlider = document.getElementById('contrast');
+                    contrastSlider.min = settings.contrast_range.min;
+                    contrastSlider.max = settings.contrast_range.max;
+                    contrastSlider.value = settings.contrast;
+                    document.getElementById('contrastValue').textContent = `Range: ${settings.contrast_range.min.toFixed(0)} - ${settings.contrast_range.max.toFixed(0)}`;
+                    console.log(`Contrast range: ${settings.contrast_range.min} to ${settings.contrast_range.max}, current: ${settings.contrast}`);
+                }
+                
+                // Update exposure slider with actual range
+                if (settings.exposure !== undefined && settings.exposure_range) {
+                    const exposureSlider = document.getElementById('exposure');
+                    exposureSlider.min = settings.exposure_range.min;
+                    exposureSlider.max = settings.exposure_range.max;
+                    exposureSlider.value = settings.exposure;
+                    document.getElementById('exposureValue').textContent = `Range: ${settings.exposure_range.min.toFixed(0)} - ${settings.exposure_range.max.toFixed(0)}`;
+                    console.log(`Exposure range: ${settings.exposure_range.min} to ${settings.exposure_range.max}, current: ${settings.exposure}`);
+                }
+                
+                // Update focus slider with actual range
+                if (settings.focus !== undefined && settings.focus_range) {
+                    const focusSlider = document.getElementById('focus');
+                    focusSlider.min = settings.focus_range.min;
+                    focusSlider.max = settings.focus_range.max;
+                    focusSlider.value = settings.focus;
+                    document.getElementById('focusValue').textContent = `Range: ${settings.focus_range.min.toFixed(0)} - ${settings.focus_range.max.toFixed(0)}`;
+                    console.log(`Focus range: ${settings.focus_range.min} to ${settings.focus_range.max}, current: ${settings.focus}`);
+                }
+                
+                // Update frame size
+                if (settings.frame_width !== undefined && settings.frame_height !== undefined) {
+                    const resolution = `${settings.frame_width}x${settings.frame_height}`;
+                    const frameSizeSelect = document.getElementById('frameSize');
+                    // Set the select to the current resolution or default to VGA
+                    if (frameSizeSelect.querySelector(`option[value="${resolution}"]`)) {
+                        frameSizeSelect.value = resolution;
+                    } else {
+                        frameSizeSelect.value = '640x480'; // Default to VGA
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading camera settings:', error);
+            }
+        }
+        
+        // Switch detection mode
+        function switchDetectionMode(mode) {
+            const formData = new FormData();
+            formData.append('use_sagemaker', mode === 'cloud' ? 'true' : 'false');
+            
+            fetch('/api/v1/mode/switch', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const statusElement = document.getElementById('currentModeStatus');
+                    if (mode === 'cloud') {
+                        statusElement.textContent = 'Cloud SageMaker Mode Active';
+                        statusElement.style.background = '#e8f4fd';
+                        statusElement.style.color = '#1e5a8a';
+                    } else {
+                        statusElement.textContent = 'Local YOLO Mode Active';
+                        statusElement.style.background = '#e8f5e8';
+                        statusElement.style.color = '#2d5a2d';
+                    }
+                    console.log(`Switched to ${mode} mode`);
+                    
+                    // Restart services to properly initialize the new mode
+                    return fetch('/api/v1/restart', {
+                        method: 'POST'
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .then(response => {
+                if (response) {
+                    return response.json();
+                }
+                return { success: true };
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log('Services restarted successfully');
+                    // Refresh the page after a short delay to ensure proper initialization
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    console.warn('Mode switched but services restart failed:', data.message);
+                    // Still refresh the page
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error switching mode:', error);
+                alert(`Failed to switch to ${mode} mode: ${error.message}`);
+            });
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            loadCameraSettings();
+            
+            // Add event listeners for mode switching
+            document.getElementById('localMode').addEventListener('change', function() {
+                if (this.checked) {
+                    switchDetectionMode('local');
+                }
+            });
+            
+            document.getElementById('cloudMode').addEventListener('change', function() {
+                if (this.checked) {
+                    switchDetectionMode('cloud');
+                }
+            });
+            
+            // Refresh stats every 30 seconds
+            setInterval(loadStats, 30000);
+        });
+    </script>
+</body>
+</html>
